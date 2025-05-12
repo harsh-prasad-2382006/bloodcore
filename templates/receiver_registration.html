@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Receiver Registration{% endblock %}
+
+{% block header %}
+<header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #8B0000;">
+        <div class="container-fluid pe-5 ps-5">
+          <a class="navbar-brand fw-bold text-uppercase p-0 m-0" href="{% url 'index' %}" style="letter-spacing: 1px;">
+            <img src="{% static 'images/logo.png' %}" alt="BloodCore - Blood Donation Platform" width="100" height="40" 
+            class="d-inline-block align-text-top" title="BloodCore: Where Every Drop Counts.">
+          </a>
+
+          <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
+            aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation" id="navbarToggle">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav ms-auto mb-2 mb-md-0 align-items-center">
+              <li class="nav-item">
+                <a class="nav-link fw-semibold px-3 {% if request.path == '/' %}active{% endif %}" href="{% url 'index' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="btn btn-light btn-sm ms-3 fw-bold lgbtn" href="{% url 'sign-in' %}" style="padding: 6px 15px;">Login</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+    </nav>
+</header>
+{% endblock header %}
+
+
+{% block content %}
+<section class="py-5 mt-5 ">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+
+        
+        <div class="card shadow rounded-4">
+          <div class="card-body p-5 position-relative">
+            {% for message in messages %}
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <p>{{ message }}</p>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+            <!-- Cross Button -->
+            <a href="{% url 'index' %}" class="btn-close position-absolute top-0 end-0 m-4" title="Go back">
+              <i class="bi bi-x-lg"></i>
+            </a>
+
+            <h2 class="text-center mb-4">Receiver Registration</h2>
+
+            <form action="" method="post" novalidate>
+                {% csrf_token %}
+                
+                <!-- First Name & Last Name -->
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label">First Name</label>
+                    <input type="text" name="first_name" class="form-control" placeholder="Enter your first name" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" name="last_name" class="form-control" placeholder="Enter your last name" required>
+                  </div>
+                </div>
+              
+                <!-- Email & Contact -->
+                <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" name="email" class="form-control" placeholder="Enter your email" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Contact Number</label>
+                    <input type="text" name="contact" class="form-control" placeholder="Enter your contact number" required>
+                  </div>
+                </div>
+              
+                
+               <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" name="dob" class="form-control" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Enter your Bloodgroup</label>
+                    <select name="bloodgroup" class="form-select" required>
+                      <option value="" selected disabled>Select your blood group</option>
+                      <option value="a+">A+</option>
+                      <option value="a-">A-</option>
+                      <option value="b+">B+</option>
+                      <option value="b-">B-</option>
+                      <option value="o+">O+</option>
+                      <option value="o-">O-</option>
+                      <option value="ab+">AB+</option>
+                      <option value="ab-">AB-</option>
+                    </select>
+                  </div>
+                </div>
+              
+                
+                 <!-- <div class="row mb-3">
+                  <div class="col-md-6">
+                    <label class="form-label">Quantity Required (in ml)</label>
+                    <input type="number" name="quantity_required" class="form-control" min="1" placeholder="Enter quantity needed in ml" required>
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label">Request Status</label>
+                    <select name="request_status" class="form-select" required>
+                      <option value="Pending" selected>Pending</option>
+                      <option value="Approved">Approved</option>
+                      <option value="Rejected">Rejected</option>
+                    </select>
+                  </div>
+                </div> -->
+              
+                <div class="row mb-3">
+                  <div class="col-md-6 position-relative">
+                    <label class="form-label">Password</label>
+                    <div class="input-group">
+                      <input type="password" name="password" class="form-control" id="password" placeholder="Create password" required>
+                      <span class="input-group-text" onclick="togglePassword('password', 'togglePasswordIcon')">
+                        <i class="bi bi-eye-slash" id="togglePasswordIcon"></i>
+                      </span>
+                    </div>
+                  </div>
+                
+                  <div class="col-md-6 position-relative">
+                    <label class="form-label">Confirm Password</label>
+                    <div class="input-group">
+                      <input type="password" name="confirm_password" class="form-control" id="confirmPassword" placeholder="Confirm password" required>
+                      <span class="input-group-text" onclick="togglePassword('confirmPassword', 'toggleConfirmIcon')">
+                        <i class="bi bi-eye-slash" id="toggleConfirmIcon"></i>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              
+                <!-- Submit Button -->
+                <div class="d-grid">
+                  <button type="submit" class="btn btn-danger btn-lg">Register</button>
+                </div>
+              
+              </form>
+              
+              
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  function togglePassword(fieldId, iconId) {
+    const input = document.getElementById(fieldId);
+    const icon = document.getElementById(iconId);
+    if (input.type === "password") {
+      input.type = "text";
+      icon.classList.remove("bi-eye-slash");
+      icon.classList.add("bi-eye");
+    } else {
+      input.type = "password";
+      icon.classList.remove("bi-eye");
+      icon.classList.add("bi-eye-slash");
+    }
+  }
+</script>
+{% endblock content %}

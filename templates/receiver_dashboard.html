@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Receiver Dashboard{% endblock %}
+{% block header %}
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark fixed-top" style="background-color: #8B0000;">
+    <div class="container-fluid pe-5 ps-5">
+      <a class="navbar-brand fw-bold text-uppercase p-0 m-0" href="{% url 'index' %}" style="letter-spacing: 1px;">
+        <img src="{% static 'images/logo.png' %}" alt="BloodCore - Blood Donation Platform" width="100" height="40"
+          class="d-inline-block align-text-top" title="BloodCore: Where Every Drop Counts.">
+      </a>
+
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation" id="navbarToggle">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-md-0 align-items-center">
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-3 {% if request.path == '/receiver-dashboard/' %}active{% endif %}" href="{% url 'receiver-dashboard' %}">
+                <i class="bi bi-speedometer2 me-1"></i> Dashboard
+              </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-3 {% if request.path == '/receiving-details/' %}active{% endif %}"
+              href="{% url 'receiving-details' %}">
+              <i class="bi bi-calendar-check me-1"></i> Requests
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-3 {% if request.path == '/receiver-profile/' %}active{% endif %}"
+              href="{% url 'receiver-profile' %}">
+              <i class="bi bi-person-circle me-1"></i> Profile
+            </a>
+          </li>
+
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <form method="post" action="{% url 'sign-out' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-light btn-sm ms-3 fw-bold lgbtn" style="padding: 6px 15px;">
+                <i class="bi bi-box-arrow-right me-1"></i> Logout
+              </button>
+            </form>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="btn btn-light btn-sm ms-3 fw-bold lgbtn" href="{% url 'sign-in' %}" style="padding: 6px 15px;">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Login
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+{% endblock header %}
+
+{% block content %}
+<div class="container mt-5 pt-5 mb-5">
+    <div class="card shadow-sm p-4">
+      <h2 class="text-center mb-3">Welcome, {{ user.first_name }}!</h2>
+      <p class="text-center mb-4">Here's a quick overview of your blood banks for you to make request</p>
+  
+      <!-- Filter Section -->
+      <form method="get" class="row g-3 justify-content-center mb-4">
+        <div class="col-md-4">
+          <input type="text" name="pincode" class="form-control" placeholder="Enter Pincode"
+            value="{{ request.GET.pincode }}">
+        </div>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-primary px-4">
+            <i class="bi bi-search me-1"></i> Search
+          </button>
+        </div>
+      </form>
+  
+      <!-- Blood Bank List Table -->
+      {% if bloodbanks %}
+      <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Blood Bank Name</th>
+              <th scope="col">Location</th>
+              <th scope="col">Contact</th>
+              <th scope="col">Book Schedule</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for bloodbank in bloodbanks %}
+            <tr>
+              <td>{{ bloodbank.blood_centre_name }}</td>
+              <td>{{ bloodbank.address }}</td>
+              <td>{{ bloodbank.user.contact }}</td>
+              <td><a href="{% url "schedule-request" id=bloodbank.id %}" class="nav-link">
+                  <button type="submit" class="btn btn-sm btn-warning"> Make request </button>
+              </a>
+              </td>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-center mt-4 text-muted">No blood banks found for this pincode.</p>
+      {% endif %}
+    </div>
+  </div>
+
+{% endblock %}
+
+
+{% block footer %}
+{% endblock footer %}

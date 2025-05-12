@@ -1,0 +1,93 @@
+{% extends "donor_dashboard.html" %}
+
+{% block title %}Donor Profile{% endblock %}
+
+{% block content %}
+
+<div class="container mt-5 mb-2  pt-3">
+
+    {% for message in messages %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+
+    <div class="card shadow p-4 rounded-4">
+        <h2 class="text-center mb-4 text-primary fw-bold">Donor Profile</h2>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Name</h6>
+                    <p class="mb-0 fw-semibold">{{ donor.user.first_name }} {{ donor.user.last_name }}</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Blood Group</h6>
+                    <p class="mb-0 fw-semibold">{{ donor.bloodgroup|title }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Date of Birth</h6>
+                    <p class="mb-0 fw-semibold">{{ donor.dob|date:"d-m-Y" }}</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Has Disease</h6>
+                    <p class="mb-0 fw-semibold">{{ donor.has_disease|yesno:"Yes,No" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Weight</h6>
+                    <p class="mb-0 fw-semibold">{{ donor.weight }} kg</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Account Created</h6>
+                    <p class="mb-0 fw-semibold">{{ donor.created_at|date:"d-m-Y" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- New Email Section -->
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Phone Number</h6>
+                    <p class="mb-0 fw-semibold">{{ donor.user.contact }}</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Email</h6>
+                    <p class="mb-0 fw-semibold">{{ donor.user.email }}</p>
+                </div>
+            </div>
+            
+        </div>
+
+        <div class="text-center mt-2">
+            <a href="{% url "edit-donor-profile" id=donor.id %}" class="btn btn-warning py-2 fw-semibold rounded-3 shadow-sm">
+                ✏️ Edit Details
+            </a>
+            <a href="{% url 'donor-dashboard' %}" class="btn btn-primary py-2 fw-semibold rounded-3 shadow-sm">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

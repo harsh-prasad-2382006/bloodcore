@@ -1,0 +1,123 @@
+{% extends "donor_dashboard.html" %}
+{% load static %}
+
+{% block title %}Donor's Donation Detail{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5 mb-5">
+  {% for message in messages %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+{% endfor %}
+
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+          <h3 class="text-center mb-4 text-primary fw-bold">My Donation Details</h3>
+
+          <div class="row g-4">
+            <div class="col-md-6">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Last Donation Date</h6>
+                  <h5 class="fw-semibold">{{ last_donation_date|date:"d-m-Y" }}</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Next Eligible Date</h6>
+                  {% if next_eligible_date %}
+                  <h5 class="fw-semibold">{{ next_eligible_date|date:"d-m-Y" }}</h5>
+                  {% else %}
+                  <h5 class="fw-semibold text-danger">N/A (First-time Donor)</h5>
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+
+            {% if donation %}
+            <div class="col-md-6">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Scheduled Donation Date</h6>
+                  <h5 class="fw-semibold">{{ donation.scheduled_date|date:"d-m-Y" }}</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Scheduled Time</h6>
+                  <h5 class="fw-semibold">{{ donation.scheduled_time }}</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Donation Center</h6>
+                  <h5 class="fw-semibold">{{ donation.blood_bank.blood_centre_name }}</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Center Address</h6>
+                  <h5 class="fw-semibold">{{ donation.blood_bank.address }}</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Donation Status</h6>
+                  <h5 class="fw-semibold">
+                    {% if donation.status == 'pending' %}
+                    <p class="btn btn-warning">Pending</p>
+                    {% elif donation.status == 'accepted' %}
+                    <p class="btn btn-success">Accepted </p>
+                    {% elif donation.status == 'rejected' %}
+                    <p class="btn btn-danger">Rejected</p>
+                    {% endif %}
+                  </h5>
+                </div>
+              </div>
+            </div>
+
+            {% if donation.status == 'pending' %}
+            <div class="col-12 text-center mt-3">
+              <form method="POST" action="{% url 'cancel-donation' donation.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                  <i class="bi bi-x-circle me-1"></i> Cancel Donation
+                </button>
+              </form>
+            </div>
+            {% endif %}
+
+            {% else %}
+            <div class="col-12">
+              <div class="alert alert-info text-center" role="alert">
+                No donation scheduled yet.
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

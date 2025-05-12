@@ -1,0 +1,66 @@
+{% extends "bloodbank_dashboard.html" %}
+{% load static %}
+
+{% block title %}Blood Requests{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5 mb-5">
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-body p-5">
+      <h3 class="text-center mb-4 text-primary fw-bold">Receiver's Requests</h3>
+
+      {% if requests %}
+        <div class="table-responsive">
+          <table class="table table-bordered table-hover text-center align-middle">
+            <thead class="table-primary">
+              <tr>
+                <th>#</th>
+                <th>Receiver Name</th>
+                <th>Contact</th>
+                <th>Blood Group</th>
+                <th>Units</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for request in requests %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ request.receiver.user.get_full_name }}</td>
+                <td>{{ request.receiver.user.email }}</td>
+                <td>{{ request.blood_group }}</td>
+                <td>{{ request.units_required }}</td>
+                <td>
+                  <span class="badge 
+                    {% if request.status == 'pending' %} bg-warning 
+                    {% elif request.status == 'approved' %} bg-success 
+                    {% elif request.status == 'rejected' %} bg-danger 
+                    {% endif %}">
+                    {{ request.status }}
+                  </span>
+                </td>
+                <td>
+                  {% if request.status == 'pending' %}
+                    <a href="{% url "update-request-status" id=request.id %}?q=0" class="btn btn-success btn-sm me-2">Approve</a>
+                    <a href="{% url "update-request-status" id=request.id %}?q=1" class="btn btn-danger btn-sm">Reject</a>
+                  {% else %}
+                    <span class="text-muted">No Actions</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="alert alert-info text-center">
+          No blood requests received.
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block footer %}{% endblock footer %}

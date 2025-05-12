@@ -1,0 +1,61 @@
+.lgbtn:hover{
+    border:solid white 1px;
+    background-color: #8B0000;
+    color:white
+}
+
+.reg:hover{
+    color:white
+}
+
+img{
+    border-radius: 5px;
+}
+
+.marquee-container {
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .marquee-track {
+    display: flex;
+    animation: scroll-left 20s linear infinite;
+    width: max-content;
+  }
+  
+  /* Pause animation on hover */
+  .marquee-container:hover .marquee-track {
+    animation-play-state: paused;
+    cursor: pointer;
+    
+  }
+  
+  .facility-card {
+    min-width: 240px;
+    border-radius: 1rem;
+    padding: 1rem;
+    flex-shrink: 0;
+    transition: transform 0.3s;
+  }
+  
+  .facility-card:hover {
+    transform: scale(1.05);
+  }
+  
+  @keyframes scroll-left {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+  
+
+.b-card{
+    transition: all 0.3s ease-in-out;
+  }
+.b-card:hover{
+  cursor: pointer;
+  transform: scale(1.05);
+}

@@ -1,0 +1,74 @@
+{% extends "receiver_dashboard.html" %}
+
+{% block title %}Receiver Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5 pt-5">
+
+    {% for message in messages %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <div class="card shadow p-4 rounded-4">
+        <h2 class="text-center mb-4 text-primary fw-bold">Receiver Profile</h2>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Name</h6>
+                    <p class="mb-0 fw-semibold">{{ receiver.user.first_name }} {{ receiver.user.last_name }}</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Blood Group</h6>
+                    <p class="mb-0 fw-semibold">{{ receiver.bloodgroup|title }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Date of Birth</h6>
+                    <p class="mb-0 fw-semibold">{{ receiver.dob|date:"d-m-Y" }}</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Account Created</h6>
+                    <p class="mb-0 fw-semibold">{{ receiver.created_at|date:"d-m-Y" }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Email Section -->
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Phone Number</h6>
+                    <p class="mb-0 fw-semibold">{{ receiver.user.contact }}</p>
+                </div>
+            </div>
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Email</h6>
+                    <p class="mb-0 fw-semibold">{{ receiver.user.email }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url "edit-receiver-profile" id=receiver.id %}" class="btn btn-warning py-2 fw-semibold rounded-3 shadow-sm">
+                ✏️ Edit Details
+            </a>
+            <a href="{% url 'receiver-dashboard' %}" class="btn btn-primary py-2 fw-semibold rounded-3 shadow-sm">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

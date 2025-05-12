@@ -1,0 +1,87 @@
+{% extends "donor_dashboard.html" %}
+
+{% block title %}Edit Donor's Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-4 mb-5 pt-5">
+    {% for message in messages %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <form method="POST" class="card shadow p-4 rounded-4">
+        {% csrf_token %}
+        <h2 class="text-center mb-4 text-primary fw-bold">Edit Donor's Profile</h2>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">First Name</label>
+                <input type="text" class="form-control" name="first_name" value="{{ donor.user.first_name }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Last Name</label>
+                <input type="text" class="form-control" name="last_name" value="{{ donor.user.last_name }}" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Blood Group</label>
+                <select name="bloodgroup" class="form-select" required>
+                    <option value="a+" {% if donor.bloodgroup == 'a+' %}selected{% endif %}>A+</option>
+                    <option value="a-" {% if donor.bloodgroup == 'a-' %}selected{% endif %}>A-</option>
+                    <option value="b+" {% if donor.bloodgroup == 'b+' %}selected{% endif %}>B+</option>
+                    <option value="b-" {% if donor.bloodgroup == 'b-' %}selected{% endif %}>B-</option>
+                    <option value="ab+" {% if donor.bloodgroup == 'ab+' %}selected{% endif %}>AB+</option>
+                    <option value="ab-" {% if donor.bloodgroup == 'ab-' %}selected{% endif %}>AB-</option>
+                    <option value="o-" {% if donor.bloodgroup == 'o-' %}selected{% endif %}>O-</option>
+                    <option value="o+" {% if donor.bloodgroup == 'o+' %}selected{% endif %}>O+</option>
+                   
+                </select>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Date of Birth</label>
+                <input type="date" class="form-control" name="dob" value="{{ donor.dob|date:'Y-m-d' }}" required>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Weight (kg)</label>
+                <input type="number" class="form-control" name="weight" value="{{ donor.weight }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Has Disease?</label>
+                <select name="has_disease" class="form-select">
+                    <option value="True" {% if donor.has_disease %}selected{% endif %}>Yes</option>
+                    <option value="False" {% if not donor.has_disease %}selected{% endif %}>No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Phone Number</label>
+                <input type="tel" class="form-control" name="contact" value="{{ donor.user.contact }}" required>
+            </div>
+        
+            <div class="col-md-6 mb-3">
+                <label class="form-label fw-semibold">Email</label>
+                <input type="email" class="form-control" name="email" value="{{ donor.user.email }}"  readonly>
+            </div>
+        </div>
+
+        <div class="text-center mt-2">
+            <button type="submit" class="btn btn-warning py-2 fw-semibold rounded-3 shadow-sm">
+                <i class="fas fa-save me-2"></i>Save Changes
+            </button>
+            <a href="{% url 'donor-dashboard' %}" class="btn btn-primary btn-lg px-2 rounded-3">
+                Back to Dashboard
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock content %}

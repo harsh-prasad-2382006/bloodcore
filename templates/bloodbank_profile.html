@@ -1,0 +1,81 @@
+{% extends "bloodbank_dashboard.html" %}
+
+{% block title %}Blood Bank Profile{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+
+    {% for message in messages %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <div class="card shadow p-4 rounded-4">
+        <h2 class="text-center mb-4 text-primary fw-bold">Blood Bank Profile</h2>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Centre Name</h6>
+                    <p class="mb-0 fw-semibold">{{ bloodbank.blood_centre_name }}</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">License Number</h6>
+                    <p class="mb-0 fw-semibold">{{ bloodbank.license_number }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Contact</h6>
+                    <p class="mb-0 fw-semibold">{{ bloodbank.user.contact }}</p>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <div class="border p-3 rounded bg-light">
+                    <h6 class="text-muted mb-1">Email</h6>
+                    <p class="mb-0 fw-semibold">{{ bloodbank.user.email }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <div class="border p-3 rounded bg-light">
+                <h6 class="text-muted mb-1">Address</h6>
+                <p class="mb-0 fw-semibold">{{ bloodbank.address }}</p>
+            </div>
+        </div>
+
+        <!-- Optional: Blood Inventory Display -->
+        <div class="mb-3">
+            <div class="border p-3 rounded bg-light">
+                <h6 class="text-muted mb-2">Blood Inventory</h6>
+                <ul class="mb-0">
+                    {% for group, quantity in bloodbank.blood_inventory.items %}
+                        <li><strong>{{ group }}</strong>: {{ quantity }} units</li>
+                    {% empty %}
+                        <li>No blood inventory data available.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url "edit-bloodbank-profile" id=bloodbank.id %}" class="btn btn-warning py-2 fw-semibold rounded-3 shadow-sm">
+                ✏️ Edit Details
+            </a>
+            <a href="{% url 'bloodbank-dashboard' %}" class="btn btn-primary btn-lg px-3 rounded-3">
+                Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,201 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Blood Bank Dashboard{% endblock %}
+
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+{% endblock %}
+
+{% block header %}
+<header>
+  <nav class="navbar navbar-expand-md navbar-dark" style="background-color: #8B0000;">
+    <div class="container-fluid pe-5 ps-5">
+      <a class="navbar-brand fw-bold text-uppercase p-0 m-0" href="{% url 'index' %}" style="letter-spacing: 1px;">
+        <img src="{% static 'images/logo.png' %}" alt="BloodCore - Blood Donation Platform" width="100" height="40"
+          class="d-inline-block align-text-top" title="BloodCore: Where Every Drop Counts.">
+      </a>
+
+      <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation" id="navbarToggle">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-md-0 align-items-center">
+
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-3 {% if request.path == '/bloodbank-dashboard/' %}active{% endif %}"
+              href="{% url 'bloodbank-dashboard' %}">
+              <i class="bi bi-speedometer2 me-1"></i>Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-3 {% if request.path == '/donation-request/' %}active{% endif %}"
+              href="{% url 'donation-request' %}">
+              <i class="bi bi-droplet-fill me-1"></i> Donation Request
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-3 {% if request.path == '/receiver-request/' %}active{% endif %}"
+              href="{% url 'receiver-request' %}">
+              <i class="bi bi-droplet-fill me-1"></i> Receiver's Request
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link fw-semibold px-3 {% if request.path == '/bloodbank-profile/' %}active{% endif %}"
+              href="{% url "bloodbank-profile" %}">
+              <i class="bi bi-person-circle me-1"></i> Profile
+            </a>
+          </li>
+
+          {% if user.is_authenticated %}
+          <li class="nav-item">
+            <form method="post" action="{% url 'sign-out' %}">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-light btn-sm ms-3 fw-bold lgbtn" style="padding: 6px 15px;">
+                <i class="bi bi-box-arrow-right me-1"></i> Logout
+              </button>
+            </form>
+          </li>
+          {% else %}
+          <li class="nav-item">
+            <a class="btn btn-light btn-sm ms-3 fw-bold lgbtn" href="{% url 'sign-in' %}" style="padding: 6px 15px;">
+              <i class="bi bi-box-arrow-in-right me-1"></i> Login
+            </a>
+          </li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+</header>
+
+{% endblock header %}
+
+{% block content %}
+<div class="container my-5">
+  <h2 class="mb-4 fw-bold text-danger">Welcome, {{ bloodbank.blood_centre_name }}</h2>
+
+  <!-- Dashboard Cards -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-md-3">
+      <div class="card shadow rounded-4 h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-heart-fill text-success fs-1 mb-2"></i>
+          <h6 class="card-title text-muted fw-bold">Total Donations</h6>
+          <p class="fs-3 text-success fw-bold">{{ total_donations }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow rounded-4 h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-hourglass-split text-warning fs-1 mb-2"></i>
+          <h6 class="card-title text-muted fw-bold">Pending Donations</h6>
+          <p class="fs-3 text-warning fw-bold">{{ pending_donations }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow rounded-4 h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-check2-circle text-primary fs-1 mb-2"></i>
+          <h6 class="card-title text-muted fw-bold">Accepted Donations</h6>
+          <p class="fs-3 text-primary fw-bold">{{ accepted_donations }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow rounded-4 h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-x-circle text-danger fs-1 mb-2"></i>
+          <h6 class="card-title text-muted fw-bold">Rejected Donations</h6>
+          <p class="fs-3 text-danger fw-bold">{{ rejected_donations }}</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-3">
+      <div class="card shadow rounded-4 h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-bag-heart-fill text-danger fs-1 mb-2"></i>
+          <h6 class="card-title text-muted fw-bold">Total Blood Requests</h6>
+          <p class="fs-3 text-danger fw-bold">{{ total_blood_requests }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow rounded-4 h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-hourglass-split text-warning fs-1 mb-2"></i>
+          <h6 class="card-title text-muted fw-bold">Pending Requests</h6>
+          <p class="fs-3 text-warning fw-bold">{{ pending_blood_requests }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow rounded-4 h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-check-circle-fill text-info fs-1 mb-2"></i>
+          <h6 class="card-title text-muted fw-bold">Approved Requests</h6>
+          <p class="fs-3 text-info fw-bold">{{ approved_blood_requests }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card shadow rounded-4 h-100 border-0 bg-light">
+        <div class="card-body text-center">
+          <i class="bi bi-x-circle-fill text-secondary fs-1 mb-2"></i>
+          <h6 class="card-title text-muted fw-bold">Rejected Requests</h6>
+          <p class="fs-3 text-secondary fw-bold">{{ rejected_requests }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Inventory Table -->
+  <div class="card shadow rounded-4">
+    <div class="card-header bg-danger text-white fw-bold d-flex align-items-center">
+      <i class="bi bi-droplet-half me-2 fs-5"></i> Blood Inventory (Units Available)
+    </div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover m-0 text-center align-middle">
+          <thead class="table-danger">
+            <tr>
+              <th>Blood Group</th>
+              <th>Units Available</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for group, units in bloodbank.blood_inventory.items %}
+            <tr>
+              <td class="fw-bold text-uppercase">
+                <i class="bi bi-droplet-fill text-danger me-1"></i>{{ group }}
+              </td>
+              <td>
+                {% if units < 5 %}
+                  <span class="badge bg-danger px-3 py-2">{{ units }}</span>
+                {% elif units < 10 %}
+                  <span class="badge bg-warning text-dark px-3 py-2">{{ units }}</span>
+                {% else %}
+                  <span class="badge bg-success px-3 py-2">{{ units }}</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="2" class="text-muted">No inventory data available.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  
+</div>
+{% endblock %}

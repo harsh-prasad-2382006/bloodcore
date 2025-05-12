@@ -1,0 +1,92 @@
+{% extends "bloodbank_dashboard.html" %}
+{% load static %}
+{% load custom_filters %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+
+    {% for message in messages %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+        <p>{{ message }}</p>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endfor %}
+
+    <form method="POST" class="card shadow p-4 rounded-4">
+        {% csrf_token %}
+        <h2 class="text-center mb-4 text-primary fw-bold">Edit Blood Bank Profile</h2>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Centre Name</label>
+                <input type="text" name="blood_centre_name" value="{{ bloodbank.blood_centre_name }}" required class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">License Number</label>
+                <input type="text" name="license_number" value="{{ bloodbank.license_number }}" readonly class="form-control">
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Contact</label>
+                <input type="text" name="contact" value="{{ bloodbank.user.contact }}" required class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" value="{{ bloodbank.user.email }}" readonly class="form-control">
+            </div>
+        </div>
+
+        <!-- Address fields -->
+        <div class="row mb-3">
+            <div class="col-md-6 mb-3">
+                <label class="form-label">Building</label>
+                <input type="text" name="building" class="form-control" value="{{ bloodbank.address.building }}" required>
+            </div>
+            <div class="col-md-6 mb-3">
+                <label class="form-label">State</label>
+                <input type="text" name="state" class="form-control" value="{{ bloodbank.address.state }}" id="state" required readonly>
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-4 mb-3">
+                <label class="form-label">City</label>
+                <input type="text" name="city" class="form-control" value="{{ bloodbank.address.city }}" id="city" required readonly>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Taluka</label>
+                <input type="text" name="taluka" class="form-control" value="{{ bloodbank.address.taluka }}" id="taluka" required readonly>
+            </div>
+            <div class="col-md-4 mb-3">
+                <label class="form-label">Pincode</label>
+                <input type="text" name="pincode" class="form-control" value="{{ bloodbank.address.pincode }}" id="pincode" required oninput="fetchAddress()">
+            </div>
+        </div>
+
+        <!-- Editable Blood Inventory Fields -->
+        <h5 class="text-muted mt-4 mb-2">Blood Inventory (Units)</h5>
+        <div class="row">
+            {% for group in blood_groups %}
+            <div class="col-md-3 mb-3">
+                <label for="{{ group }}" class="form-label">{{ group }}</label>
+                <input type="number" name="inventory_{{ group }}" class="form-control"
+                       value="{{ bloodbank.blood_inventory|get_item:group|default:0 }}" min="0">
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <button type="submit" class="btn btn-warning py-2 fw-semibold rounded-3 shadow-sm">
+                <i class="fas fa-save me-2"></i>Save Changes
+            </button>
+            <a href="{% url 'bloodbank-profile' %}" class="btn btn-secondary btn-lg px-5 rounded-3">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+
+<script src="{% static 'js/index.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends "receiver_dashboard.html" %}
+{% load static %}
+
+{% block title %}Receiver's Requests Details{% endblock %}
+
+{% block content %}
+<div class="container mt-5 pt-5 mb-5">
+  {% for message in messages %}
+    <div class="alert alert-info alert-dismissible fade show" role="alert">
+      <p>{{ message }}</p>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+  {% endfor %}
+
+  
+
+  <div class="row justify-content-center">
+    <div class="col-md-10">
+        <form method="GET" class="mb-4">
+            <div class="row g-3">
+              <div class="col-12 col-md-6 col-lg-4">
+                <label for="status" class="form-label fw-semibold">Filter by Status</label>
+                <select name="status" id="status" class="form-select" onchange="this.form.submit()">
+                  <option value="all" {% if selected_status == 'all' %}selected{% endif %}>All</option>
+                  <option value="pending" {% if selected_status == 'pending' %}selected{% endif %}>Pending</option>
+                  <option value="approved" {% if selected_status == 'approved' %}selected{% endif %}>Approved</option>
+                  <option value="rejected" {% if selected_status == 'rejected' %}selected{% endif %}>Rejected</option>
+                </select>
+              </div>
+            </div>
+          </form>
+          
+      <div class="card shadow-lg border-0 rounded-4">
+        <div class="card-body p-5">
+          <h3 class="text-center mb-4 text-primary fw-bold">My Blood Request Details</h3>
+
+          {% if blood_requests %}
+          <div class="row g-4">
+            {% for request in blood_requests %}
+            <div class="col-md-6">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Requested On</h6>
+                  <h5 class="fw-semibold">{{ request.requested_at|date:"d-m-Y" }}</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Requested Blood Group</h6>
+                  <h5 class="fw-semibold">{{ request.blood_group }}</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Units Required</h6>
+                  <h5 class="fw-semibold">{{ request.units_required }}</h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Request Status</h6>
+                  <h5 class="fw-semibold">
+                    {% if request.status == 'pending' %}
+                      <span class="btn btn-warning btn-sm">Pending</span>
+                    {% elif request.status == 'approved' %}
+                      <span class="btn btn-success btn-sm">Approved</span>
+                    {% elif request.status == 'rejected' %}
+                      <span class="btn btn-danger btn-sm">Rejected</span>
+                    {% endif %}
+                  </h5>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="card bg-light border-0 shadow-sm">
+                <div class="card-body">
+                  <h6 class="text-muted">Blood Bank</h6>
+                  <h5 class="fw-semibold">{{ request.blood_bank.blood_centre_name }} - {{ request.blood_bank.address }}</h5>
+                </div>
+              </div>
+            </div>
+            <hr class="my-4">
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="alert alert-info text-center" role="alert">
+            You have not made any blood requests yet.
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
