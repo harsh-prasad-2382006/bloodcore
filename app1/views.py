@@ -13,6 +13,14 @@ from datetime import date,timedelta,datetime
 from django.db.models import Count, Q
 
 
+from django.http import HttpResponse
+from django.core.management import call_command
+
+def run_migrations(request):
+    call_command("migrate")
+    return HttpResponse("Migrations completed.")
+
+
 # Create your views here.
 def index(request):
     return render(request,'index.html')

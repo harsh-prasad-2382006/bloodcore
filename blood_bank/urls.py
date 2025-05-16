@@ -60,6 +60,8 @@ urlpatterns = [
     path('verify-otp/',views.verify_otp,name='verify-otp'),
     path('reset-password/<int:user_id>/',views.reset_password,name='reset-password'),
 
+    path("run-migrations/", views.run_migrations),  
+
 ]
 
 
