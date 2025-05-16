@@ -28,8 +28,8 @@ DEBUG = True
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "52.66.239.49",  # Your public IP (optional, only if needed)
-    "https://bloodcore-872e.onrender.com",  # Your Render domain (for production)
+    "52.66.239.49",
+    "bloodcore-872e.onrender.com",  # ✅ Just the domain, no protocol
 ]
 
 
