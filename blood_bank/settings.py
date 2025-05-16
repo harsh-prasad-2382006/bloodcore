@@ -29,7 +29,7 @@ ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
     "52.66.239.49",  # Your public IP (optional, only if needed)
-    "*",  # Your Render domain (for production)
+    "https://bloodcore-872e.onrender.com",  # Your Render domain (for production)
 ]
 
 
@@ -138,3 +138,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'bloodcore.services@gmail.com' #sender's email-id
 EMAIL_HOST_PASSWORD = 'auwn hlqg qydo wyvc' 
 
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://bloodcore-872e.onrender.com",
+]
